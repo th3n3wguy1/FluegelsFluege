@@ -5,19 +5,19 @@ services:
     build: ./FrontEnd
     restart: always
     ports:
-      - 3000:3000
+      - 8080:80
   
   backend:
     build: ./BackEnd
     restart: always
     ports:
-      - 5000:5000
+      - 5050:5050
 
-  database:
-    image: mongo
-    restart: always
-    ports:
-      - 27017:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
+  # database:
+  #   image: mongo
+  #   restart: always
+  #   ports:
+  #     - 27017:27017
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: root
