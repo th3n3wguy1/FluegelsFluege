@@ -1,15 +1,6 @@
 const express = require('express');
-const { MongoClient, Collection } = require('mongodb')
 const router = express.Router();
 
-const client = new MongoClient('mongodb://localhost:27017')
-client.connect().then(() => {
-    console.log("Successfully connected to MongoDB!")
-}).catch(() => {
-    console.log("Cannot connect to MongoDB")
-})
-
-const database = client.db("FluegelsFluege")
 const users = database.collection("users")
 
 router.post('/create', (req, res) => {
@@ -26,7 +17,8 @@ router.post('/create', (req, res) => {
 
 router.post('/read', (req, res) => {
     users.findOne(req.body).then(v => {
-        res.send(v)
+        if (v) res.send(v)
+        else res.sendStatus(404)
     }).catch(() => {
         res.sendStatus(500)
     })
