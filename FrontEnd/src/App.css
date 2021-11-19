@@ -1,0 +1,22 @@
+.app-bar {
+    background-color: #1B1F21;
+    padding: 15px 15px;
+  }
+  
+.app-bar-title {
+    font-family: 'Arial', cursive;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 0;
+    word-spacing: 6px;
+  }
+
+  .app-bar-title-low {
+    font-family: 'Arial narrow', cursive;
+    color: #fff;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 0;
+    word-spacing: 6px;
+  }
