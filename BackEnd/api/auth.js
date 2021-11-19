@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const express = require('express');
 const { check, validationResult, matchedData } = require('express-validator');
+const log = require('./log')
 
 const router = express.Router();
 const users = database.collection("users")
@@ -58,6 +59,7 @@ function authRequired(req, res, next) {
             if (err) throw err;
 
             req.user = decode;
+            log('user', `${req.user.username} ${req.method} ${req.originalUrl}`)
             next()
         })
     } catch (e) {
@@ -70,6 +72,7 @@ function adminRequired(req, res, next) {
     users.findOne({ email: req.user.email }).then(value => {
         if (!value) res.status(403).send("Unable to login")
         else {
+            log('admin', `${req.user.username} ${req.method} ${req.originalUrl}`)
             next()
         }
     }).catch(() => {
