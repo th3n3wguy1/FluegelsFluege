@@ -20,3 +20,8 @@
     margin-bottom: 0;
     word-spacing: 6px;
   }
+
+  .center{
+    display:flex;
+    justify-content:center;
+ }
