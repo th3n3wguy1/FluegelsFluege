@@ -20,7 +20,8 @@ router.post('/login', [
             if (!value) res.status(400).send("Unable to login")
             else {
                 const { first_name, last_name, username, email } = value
-                res.send(jwt.sign({ first_name, last_name, username, email }, config.jsonwebtoken))
+                const token = jwt.sign({ first_name, last_name, username, email }, config.jsonwebtoken)
+                res.cookie('jwt', token).sendStatus(200)
             }
         })
     }
@@ -41,7 +42,8 @@ router.post('/register', [
 
         users.insertOne({ ...matchedData(req), password, admin: false }).then(() => {
             const { first_name, last_name, username, email } = matchedData(req)
-            res.status(201).send(jwt.sign({ first_name, last_name, username, email }, config.jsonwebtoken))
+            const token = jwt.sign({ first_name, last_name, username, email }, config.jsonwebtoken)
+            res.cookie('jwt', token).sendStatus(201)
         }).catch(() => {
             res.sendStatus(500)
         })
@@ -49,15 +51,15 @@ router.post('/register', [
 })
 
 function authRequired(req, res, next) {
-    const token = req.header("x-auth-token")
+    const token = req.cookies.jwt
 
     if (!token)
-        return res.status(401).send('No token, authorisation denied!')
-
+    return res.status(401).send('No token, authorisation denied!')
+    
     try {
         jwt.verify(token, config.jsonwebtoken, (err, decode) => {
             if (err) throw err;
-
+            
             req.user = decode;
             log('user', `${req.user.username} ${req.method} ${req.originalUrl}`)
             next()
