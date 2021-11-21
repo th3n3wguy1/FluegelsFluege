@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 
-
-
 class SettingsUser extends Component {
     constructor(props) {
         super(props);
