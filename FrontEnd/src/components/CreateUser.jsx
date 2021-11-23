@@ -23,9 +23,31 @@ class CreateUser extends Component {
          this.startRegister = this.startRegister.bind(this);
     }
 
-    startRegister() {
+    async startRegister() {
         if (this.state.isVerified) {
-            alert("Register wird durchgeführt!")
+            if (this.state.password === this.state.password_check) {
+                const toSubmit = {
+                "first_name": this.state.first_name,
+                "last_name": this.state.last_name,
+                "username": this.state.username,
+                "email": this.state.email,
+                "password": this.state.password,
+                "phone": this.state.phone,
+                "credit_card": this.state.credit_card
+                }
+                /*
+                const response = await fetch('http://localhost:5050/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'charset':'utf-8'},
+                body: JSON.stringify(toSubmit)
+                })
+                const data = await response.json()
+
+                alert(data);
+                */
+            } else {
+                alert("Ihre Passwörter stimmen nicht überein!")
+            }
         } else {
             alert("Bitte Captcha durchführen!")
         }
