@@ -10,7 +10,11 @@
     "react-dom": "^17.0.2",
     "react-scripts": "^3.4.4",
     "web-vitals": "^1.0.1",
-    "webpack": "^4.42.0"
+    "webpack": "^4.42.0",
+    "bootstrap": "^4.6.0",
+    "react-recaptcha": "^2.3.10",
+    "react-view": "^2.3.7",
+    "react-day-picker": "^7.4.10"
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",

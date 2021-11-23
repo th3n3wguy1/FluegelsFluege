@@ -13,11 +13,11 @@ services:
     ports:
       - 5050:5050
 
-  # database:
-  #   image: mongo
-  #   restart: always
-  #   ports:
-  #     - 27017:27017
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: root
+  database:
+    image: mongo
+    restart: always
+    # ports:
+    #   - 27017:27017
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: root
