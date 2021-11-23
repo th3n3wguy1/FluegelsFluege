@@ -10,14 +10,12 @@ import SettingsUser from "./components/SettingsUser";
 
 import './App.css'
 
-
-
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      primePage: <BasicScreen/>,
+      primePage: BasicScreen,
       isAdmin: false
     };
 
@@ -30,20 +28,24 @@ class App extends React.Component {
     this.setState({
       startDate: date
     })
-
   }
 
   handleSettings(e) {
     if (this.state.isAdmin) {
-      this.setState({ primePage: <SettingsAdmin />})
+      this.setState({ primePage: SettingsAdmin })
     } else {
-      this.setState({ primePage: <SettingsUser />})
+      this.setState({ primePage: SettingsUser })
     }
-
   }
 
   onButtonClicked(e, toOpen){
     this.setState({ primePage: toOpen})
+  }
+
+  componentDidMount() {
+
+    //prüfen ob user eingeloggt/admin ist und dann state setzen
+
   }
 
   render() { 
@@ -58,7 +60,7 @@ class App extends React.Component {
 
         <Content clickHandler = {this.onButtonClicked} clickHandlerSettings = {this.handleSettings}/>
         <div className="chosen-Page">
-          {this.state.primePage}
+          {React.createElement(this.state.primePage, {setState: this.onButtonClicked})}
         </div>
       </section>
     </Fragment>
@@ -72,16 +74,16 @@ class Content extends React.Component {
     return (
       <div class='row' >
         <div class="center">
-          <button onClick = {(e) => this.props.clickHandler(e, <LoginScreen />)}>Zum Login</button>
+          <button onClick = {(e) => this.props.clickHandler(e, LoginScreen)}>Zum Login</button>
         </div>
         <div class="center">
-          <button onClick = {(e) => this.props.clickHandler(e, <CreateUser />)}>Benutzer Erstellen</button>
+          <button onClick = {(e) => this.props.clickHandler(e, CreateUser)}>Benutzer Erstellen</button>
         </div>
         <div class="center">
           <button onClick = {(e) => this.props.clickHandlerSettings(e)}>Einstellungen/Verwaltung</button>
         </div>
         <div class="center">
-          <button onClick = {(e) => this.props.clickHandler(e, <FlightOverview />)}>Zu den Flügen</button>
+          <button onClick = {(e) => this.props.clickHandler(e, FlightOverview)}>Zu den Flügen</button>
         </div>
       </div>
     );
@@ -91,6 +93,9 @@ class Content extends React.Component {
 export default App;
 
 /*
+
+
+
 function App() {
   return()
     <div className="App">

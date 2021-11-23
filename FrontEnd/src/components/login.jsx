@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { View, Text } from "react-view";
 import Recaptcha from 'react-recaptcha';
 
+import startScreen from './startScreen';
+
 import "./Wrapper.css"
 
 class Login extends Component {
@@ -10,7 +12,8 @@ class Login extends Component {
     this.state = { 
       username: "",
       password: "",
-      isVerified: false
+      isVerified: false,
+      isLoggedIn: false
      }
 
      this.setUserName = this.setUserName.bind(this);
@@ -36,10 +39,29 @@ class Login extends Component {
     this.setState({password: event.target.value});
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const token = loginUser(this.state.username, this.state.password);
-    setToken(token);
+  async handleSubmit(event) {
+    
+    const toSubmit = {
+      "username": this.state.username,
+      "password": this.state.password
+    }
+
+    if (this.state.isLoggedIn == false) {
+      /*const response = await fetch('http://localhost:5050/api/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'charset':'utf-8'},
+      body: JSON.stringify(toSubmit)
+      })
+
+      const data = await response.json()
+  */
+      //alert(JSON.stringify(this.props));
+      this.props.setState(event, startScreen);
+      event.preventDefault();
+    } else {
+      alert("Sie sind bereits eingeloggt!")
+    }
+    
   }
 
   render() { 
@@ -73,7 +95,7 @@ async function loginUser(credentials) {
     headers: {
       'Content-Type': 'application/json', 'charset':'utf-8'
     },
-    body: JSON.stringify(credentials)
+    body: credentials
   })
     .then(data => data.json())
 }
