@@ -21,7 +21,7 @@ export default function BasicTableSelectFlight(props) {
                     return (
                         <>
                         <tr key = {key}>
-                            <td><center><button onClick={() => props.setFlightID(item._id)}> Buchen </button></center></td>
+                            <td><center><button onClick={(e) => props.setFlightID(e, item._id)}> Buchen </button></center></td>
                             <td><center>{item._id}</center></td>
                             <td>{item.origin}</td>
                             <td>{item.destination}</td>

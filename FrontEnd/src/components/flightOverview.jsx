@@ -1,13 +1,23 @@
 import React, { Component } from "react";
-import DayPicker from "react-day-picker";
+import format from "date-fns/format";
+import DatePicker from 'react-datepicker'
 
-import 'react-day-picker/lib/style.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 import "./Wrapper.css"
 import './table.css'
 
 import MOCKDATA from './test-data.json'
 import BasicTableSelectFlight from "./basicTableSelectFlight";
+
+import BookingOverview from "./flightBooking";
+
+const filterPassedTime = (time) => {
+  const currentDate = new Date();
+  const selectedDate = new Date(time);
+
+  return currentDate.getTime() < selectedDate.getTime();
+};
 
 class FlightOverview extends Component {
   constructor(props) {
@@ -19,14 +29,14 @@ class FlightOverview extends Component {
       destination: "",
       time: new Date(),
       anzahlReisende: 1,
-      flights: [],
-      idToBook: ""
+      flights: []
     };
 
     this.handleChangePassenger = this.handleChangePassenger.bind(this);
     this.handleChangeStartDate = this.handleChangeStartDate.bind(this);
     this.handleChangeStart = this.handleChangeStart.bind(this);
     this.handleChangeDest = this.handleChangeDest.bind(this);
+    this.handleBooking = this.handleBooking.bind(this);
 
   }
 
@@ -46,42 +56,26 @@ class FlightOverview extends Component {
     this.setState({destination: event.target.value});  
   }
   
-  handleChangeStartDate(day) {
-    this.setState({time: day});
+  handleChangeStartDate(date) {
+    this.setState({time: date})
+    {/*this.setState({timeToSubmit: format(date, "yyyy-M-d'T'hh:mm:ss'Z'") });*/}
   }
 
-  async handleBooking(newID) {
+  async handleBooking(e, newID) {
     
-    const toSubmit = {
-      "_id": newID
-    }
-/*
-    const response = await fetch('http://localhost:5050/api/flights/book', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json', 'charset':'utf-8'},
-      body: JSON.stringify(toSubmit)
-    })
+    this.props.setFlightID(newID)
+    this.props.setPassengerCount(this.state.anzahlReisende)
+    this.props.setPage(e, BookingOverview)
 
-    const data = await response.json()
-
-    if (data != "OK") {
-      alert("Die Buchung war nicht erfolgreich");
-    } else {
-      alert("Der Flug wurde gebucht. Ihre Kreditkarte wird belastet!")
-    }
-    */
-
-    alert(JSON.stringify(toSubmit))
   }
 
   async handleSubmit() {
     const selectedData = {
       "origin": this.state.origin,
       "destination": this.state.destination,
-      "time": this.state.time
+      "time": format(this.state.time,"yyyy-M-d'T'hh:mm:ss'Z'")
     }
-    /*
-
+    
     const response = await fetch('http://localhost:5050/api/flights/search', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', 'charset':'utf-8'},
@@ -89,8 +83,12 @@ class FlightOverview extends Component {
     })
 
     const data = await response.json()
-*/
-    //return(render(<Listing toTransfer={data}/>))
+
+    if (response.ok) {
+      this.setState({flights: data})
+    } else {
+      alert("Bei der Suche ist ein Fehler aufgetreten!")
+    }
 
   }
 
@@ -159,18 +157,27 @@ class FlightOverview extends Component {
           <div>
             Wann wollen soll der Flug starten:
           </div>
-          <div>
-            <DayPicker 
-            selectedDays={this.state.time}
-            onDayClick={this.handleChangeStartDate}
+          <div> 
+
+            <DatePicker
+                selected={this.state.time}
+                onChange={(date) => this.handleChangeStartDate(date)}
+                showTimeSelect
+                timeFormat="hh:mm aa"
+                timeIntervals={20}
+                timeCaption="time"
+                dateFormat="yyyy-M-d hh:mm aa"
+                minDate={new Date()}
+                filterTime={filterPassedTime}
             />
+
           </div>
         <input type="submit" value="Nach Flug suchen" />
         <div>
           <p>Ausgewählter Start: {this.state.origin}</p>
           <p>Ausgewähltes Ziel: {this.state.destination}</p>
           <p>Anzahl Passagiere: {this.state.anzahlReisende}</p>
-          <p>Ausgewähltes Datum: {this.state.time.toLocaleDateString()}</p>
+          <p>Ausgewähltes Datum: {format(this.state.time, "yyyy-M-d'T'hh:mm:ss'Z'")}</p>
         </div>
       </form>
       <div>

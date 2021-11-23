@@ -7,8 +7,10 @@ import FlightOverview from "./components/flightOverview";
 import CreateUser from "./components/CreateUser";
 import SettingsAdmin from "./components/SettingsAdmin";
 import SettingsUser from "./components/SettingsUser";
+import BookingOverview from "./components/flightBooking";
 
 import './App.css'
+import { th } from "date-fns/locale";
 
 class App extends React.Component {
 
@@ -16,18 +18,30 @@ class App extends React.Component {
     super(props);
     this.state = {
       primePage: BasicScreen,
-      isAdmin: false
+      isAdmin: true,
+      flighIdtToBook: "",
+      countPassengers: 1
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.onButtonClicked = this.onButtonClicked.bind(this);
     this.handleSettings = this.handleSettings.bind(this);
+    this.setFlightID = this.setFlightID.bind(this);
+    this.setPassengerCount = this.setPassengerCount.bind(this);
   }
 
   handleChange(date) {
     this.setState({
       startDate: date
     })
+  }
+
+  setFlightID(ID) {
+    this.setState({flighIdtToBook: ID})
+  }
+
+  setPassengerCount(newCount) {
+    this.setState({countPassengers: newCount})
   }
 
   handleSettings(e) {
@@ -60,7 +74,14 @@ class App extends React.Component {
 
         <Content clickHandler = {this.onButtonClicked} clickHandlerSettings = {this.handleSettings}/>
         <div className="chosen-Page">
-          {React.createElement(this.state.primePage, {setState: this.onButtonClicked})}
+          {React.createElement(
+            this.state.primePage, {
+              setPage: this.onButtonClicked, 
+              setFlightID: this.setFlightID, 
+              setPassengerCount: this.setPassengerCount, 
+              flightID: this.state.flighIdtToBook,
+              passengerCount: this.state.countPassengers
+              })}
         </div>
       </section>
     </Fragment>
